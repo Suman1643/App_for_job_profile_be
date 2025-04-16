@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 
 const jobRoutes = require("./routes/jobRoutes");
 const studentRoutes = require("./routes/studentRoutes");
+const resumeRoutes = require("./routes/resume");
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/jobs", jobRoutes);
 app.use("/api/students", studentRoutes);
+app.use("/api/resume", resumeRoutes);
 
 connectDB();
 const PORT = process.env.PORT || 5000;
