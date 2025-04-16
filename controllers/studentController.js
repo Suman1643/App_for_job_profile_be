@@ -1,5 +1,5 @@
-const Student = require('../models/Student');
-const Job = require('../models/Job');
+const Student = require("../models/Student");
+const Job = require("../models/Job");
 
 exports.saveProfile = async (req, res) => {
   try {
@@ -16,9 +16,8 @@ exports.saveProfile = async (req, res) => {
       student.skills = skills;
 
       await student.save();
-      return res.status(200).json({ message: 'Profile updated', student });
+      return res.status(200).json({ message: "Profile updated", student });
     } else {
-      // Create new student
       student = await Student.create({
         _id: studentId, // optional: only if you're using custom IDs
         name,
@@ -26,18 +25,21 @@ exports.saveProfile = async (req, res) => {
         resumeUrl,
         skills,
       });
-      return res.status(201).json({ message: 'Profile saved', student });
+      return res.status(201).json({ message: "Profile saved", student });
     }
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: 'Failed to save profile' });
+    return res.status(500).json({ message: "Failed to save profile" });
   }
 };
 
 exports.createOrUpdateProfile = async (req, res) => {
   try {
     const { email } = req.body;
-    const student = await Student.findOneAndUpdate({ email }, req.body, { new: true, upsert: true });
+    const student = await Student.findOneAndUpdate({ email }, req.body, {
+      new: true,
+      upsert: true,
+    });
     res.json(student);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -49,7 +51,7 @@ exports.getProfile = async (req, res) => {
     const student = await Student.findOne({ email: req.params.email });
     res.json(student);
   } catch (err) {
-    res.status(404).json({ error: 'Student not found' });
+    res.status(404).json({ error: "Student not found" });
   }
 };
 
@@ -61,7 +63,7 @@ exports.applyToJob = async (req, res) => {
       student.appliedJobs.push(jobId);
       await student.save();
     }
-    res.json({ message: 'Applied successfully' });
+    res.json({ message: "Applied successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -69,7 +71,9 @@ exports.applyToJob = async (req, res) => {
 
 exports.getAppliedJobs = async (req, res) => {
   try {
-    const student = await Student.findOne({ email: req.params.email }).populate('appliedJobs');
+    const student = await Student.findOne({ email: req.params.email }).populate(
+      "appliedJobs"
+    );
     res.json(student.appliedJobs);
   } catch (err) {
     res.status(500).json({ error: err.message });
